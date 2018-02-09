@@ -87,23 +87,19 @@
 
 
 
-<meta name="description" content="本文将介绍HANA 用户被锁，无法登陆的处理方式。
-现象1、HANA数据库用户突然无法登陆，提示Invalid user name or password，但是用户名密码没有错误；2、HANA服务可以正常启动。
-分析：1、HANA服务可以正常启动，说明数据库本身没有问题；2、用户无法登陆，则从该用户处查找问题。3、原因猜测：用户被锁。　　默认情况下登陆HANA密码输入错误6次以上，系统会将该用户锁">
+<meta name="description" content="本文将介绍HANA 用户被锁，无法登陆的处理方式。 现象1、HANA数据库用户突然无法登陆，提示Invalid user name or password，但是用户名密码没有错误；2、HANA服务可以正常启动。 分析：1、HANA服务可以正常启动，说明数据库本身没有问题；2、用户无法登陆，则从该用户处查找问题。3、原因猜测：用户被锁。　　默认情况下登陆HANA密码输入错误6次以上，系统会将该用户锁">
+<meta name="keywords" content="SAP HANA,登录">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SAP HANA-2  HANA 用户被锁，无法登陆">
 <meta property="og:url" content="http://blenderkou.win/2017/07/29/SAP-HANA-1002/index.html">
-<meta property="og:site_name" content="BlenderKou's blog">
-<meta property="og:description" content="本文将介绍HANA 用户被锁，无法登陆的处理方式。
-现象1、HANA数据库用户突然无法登陆，提示Invalid user name or password，但是用户名密码没有错误；2、HANA服务可以正常启动。
-分析：1、HANA服务可以正常启动，说明数据库本身没有问题；2、用户无法登陆，则从该用户处查找问题。3、原因猜测：用户被锁。　　默认情况下登陆HANA密码输入错误6次以上，系统会将该用户锁">
+<meta property="og:site_name" content="BlenderKou&#39;s blog">
+<meta property="og:description" content="本文将介绍HANA 用户被锁，无法登陆的处理方式。 现象1、HANA数据库用户突然无法登陆，提示Invalid user name or password，但是用户名密码没有错误；2、HANA服务可以正常启动。 分析：1、HANA服务可以正常启动，说明数据库本身没有问题；2、用户无法登陆，则从该用户处查找问题。3、原因猜测：用户被锁。　　默认情况下登陆HANA密码输入错误6次以上，系统会将该用户锁">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1002-01.jpg">
 <meta property="og:updated_time" content="2017-08-04T14:58:21.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SAP HANA-2  HANA 用户被锁，无法登陆">
-<meta name="twitter:description" content="本文将介绍HANA 用户被锁，无法登陆的处理方式。
-现象1、HANA数据库用户突然无法登陆，提示Invalid user name or password，但是用户名密码没有错误；2、HANA服务可以正常启动。
-分析：1、HANA服务可以正常启动，说明数据库本身没有问题；2、用户无法登陆，则从该用户处查找问题。3、原因猜测：用户被锁。　　默认情况下登陆HANA密码输入错误6次以上，系统会将该用户锁">
+<meta name="twitter:description" content="本文将介绍HANA 用户被锁，无法登陆的处理方式。 现象1、HANA数据库用户突然无法登陆，提示Invalid user name or password，但是用户名密码没有错误；2、HANA服务可以正常启动。 分析：1、HANA服务可以正常启动，说明数据库本身没有问题；2、用户无法登陆，则从该用户处查找问题。3、原因猜测：用户被锁。　　默认情况下登陆HANA密码输入错误6次以上，系统会将该用户锁">
 <meta name="twitter:image" content="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1002-01.jpg">
 
 
@@ -384,7 +380,7 @@
         <p>本文将介绍HANA 用户被锁，无法登陆的处理方式。</p>
 <h1 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h1><p>1、HANA数据库用户突然无法登陆，提示Invalid user name or password，但是用户名密码没有错误；<br>2、HANA服务可以正常启动。</p>
 <h1 id="分析："><a href="#分析：" class="headerlink" title="分析："></a>分析：</h1><p>1、HANA服务可以正常启动，说明数据库本身没有问题；<br>2、用户无法登陆，则从该用户处查找问题。<br>3、原因猜测：用户被锁。<br>　　默认情况下登陆HANA密码输入错误6次以上，系统会将该用户锁定。</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>去掉锁定用户的默认设置<br>操作步骤：<br>1、在indexserver.ini文件中加入如下参数。<br>　　（文件路径：/usr/sap/NDB/SYS/global/hdb/custom/config）<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[password policy]</div><div class="line">password_lock_for_system_user = false</div></pre></td></tr></table></figure></p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>去掉锁定用户的默认设置<br>操作步骤：<br>1、在indexserver.ini文件中加入如下参数。<br>　　（文件路径：/usr/sap/NDB/SYS/global/hdb/custom/config）<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[password policy]</span><br><span class="line">password_lock_for_system_user = false</span><br></pre></td></tr></table></figure></p>
 <p>效果如下所示：<br><img src="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1002-01.jpg" alt=""></p>
 <p>2、重启HANA服务</p>
 
