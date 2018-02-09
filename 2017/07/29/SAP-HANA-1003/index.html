@@ -1,5 +1,800 @@
-<html>
-<body>
-<meta http-equiv="refresh" content="0.1;url=http://www.blenderkou.top/2017/07/29/SAP-HANA-1003/">
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SAP HANA,HANA 服务启动," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本文记录处理启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。问题的过程，希望对您有所帮助。 检测HANA服务运行是否正常##方法一：1、检查是否可以在“命令行模式”运行“hdbsql”以确保HANA服务运行正常。2、登录HANA数据库用户（如：SYSTEM）12su - hdbadm  hdbsql -u system -p &amp;">
+<meta name="keywords" content="SAP HANA,HANA 服务启动">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SAP HANA-3  启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。">
+<meta property="og:url" content="http://blenderkou.win/2017/07/29/SAP-HANA-1003/index.html">
+<meta property="og:site_name" content="BlenderKou&#39;s blog">
+<meta property="og:description" content="本文记录处理启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。问题的过程，希望对您有所帮助。 检测HANA服务运行是否正常##方法一：1、检查是否可以在“命令行模式”运行“hdbsql”以确保HANA服务运行正常。2、登录HANA数据库用户（如：SYSTEM）12su - hdbadm  hdbsql -u system -p &amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1003-01.jpg">
+<meta property="og:image" content="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1003-02.jpg">
+<meta property="og:updated_time" content="2017-08-04T14:58:20.772Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SAP HANA-3  启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。">
+<meta name="twitter:description" content="本文记录处理启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。问题的过程，希望对您有所帮助。 检测HANA服务运行是否正常##方法一：1、检查是否可以在“命令行模式”运行“hdbsql”以确保HANA服务运行正常。2、登录HANA数据库用户（如：SYSTEM）12su - hdbadm  hdbsql -u system -p &amp;">
+<meta name="twitter:image" content="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1003-01.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blenderkou.win/2017/07/29/SAP-HANA-1003/"/>
+
+
+
+
+
+  <title> SAP HANA-3  启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。 | BlenderKou's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b4b0e02bcd3a67e5679aee2d6c16617d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BlenderKou's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">寇艳超的学习分享平台</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blenderkou.win/2017/07/29/SAP-HANA-1003/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BlenderKou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ohlkkrajk.bkt.clouddn.com/image/jpg/%E5%AF%87%E8%89%B3%E8%B6%85.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BlenderKou's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SAP HANA-3  启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-29T12:10:14+08:00">
+                2017-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SAP-HANA/" itemprop="url" rel="index">
+                    <span itemprop="name">SAP HANA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文记录处理启动HANA服务提示：“FALL:process hdbdaemon HDB Daemon not running”。问题的过程，希望对您有所帮助。</p>
+<h1 id="检测HANA服务运行是否正常"><a href="#检测HANA服务运行是否正常" class="headerlink" title="检测HANA服务运行是否正常"></a>检测HANA服务运行是否正常</h1><p>##方法一：<br>1、检查是否可以在“命令行模式”运行“hdbsql”以确保HANA服务运行正常。<br>2、登录HANA数据库用户（如：SYSTEM）<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su - hdbadm  </span><br><span class="line">hdbsql -u system -p &lt;new password&gt; -n localhost:30015</span><br></pre></td></tr></table></figure></p>
+<p>3、如果进入 “hdbsql” 提示符, 则运行如下命令列出数据库中所有表。</p>
+<pre><code class="sql">&gt; \dt
+</code></pre>
+<p>　可以用”q”退出该模式.<br>４、如果运行上面的命令可以看到数据库中的表名，则说明HANA服务是没有问题的。</p>
+<p>参考： <a href="https://archive.sap.com/discussions/thread/3656689" target="_blank" rel="noopener">https://archive.sap.com/discussions/thread/3656689</a>  中的最后一个回答</p>
+<p>##方法二：<br>在服务器上安装HANA Studio ，连接HANA服务器时的连接信息不输入IP，输入 loclhost，如果可以正常登录则说明HANA服务没问题。</p>
+<h1 id="查看网络"><a href="#查看网络" class="headerlink" title="查看网络"></a>查看网络</h1><p>如果HANA服务运行正常则检测网络设置<br>1、查看客户机是否可以ping通服务器IP；<br>2、服务器防火墙是否已开放相应端口（测试时可以直接关闭防火墙，需要开放的端口：30015, 50013 和 50014.）；<br>3、查看Linux服务器中的“HostName”配置信息是否正确。<br>　打开“Hostnames”<br>  <img src="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1003-01.jpg" alt=""></p>
+<p>  正确配置应如下图所示：<br>  <img src="http://ohlkkrajk.bkt.clouddn.com/image/jpg/SAP-HANA-1003-02.jpg" alt=""><br>  第一列是IP（设置的固定内网IP、和127.0.0.1）<br>  第二列是主机名（网络配置中设定的值）<br>  第三列是主机名.域名（网络配置设定的值）<br>4、配置好网络连接后重启服务器、开启HANA服务检测是否可以正常连接服务器。</p>
+<p>注：以上内容是我的处理方法，如果对您无效欢迎留言沟通。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="http://ohlkkrajk.bkt.clouddn.com/image/jpg/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg?imageView/3/w/200/h/200" alt="BlenderKou wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫描二维码，关注我的公众号，第一时间获取文章！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SAP-HANA/" rel="tag"># SAP HANA</a>
+          
+            <a href="/tags/HANA-服务启动/" rel="tag"># HANA 服务启动</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/29/SAP-HANA-1002/" rel="next" title="SAP HANA-2  HANA 用户被锁，无法登陆">
+                <i class="fa fa-chevron-left"></i> SAP HANA-2  HANA 用户被锁，无法登陆
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/29/SAP-SU-1005/" rel="prev" title="SAP B1-系统应用-5  SAP B1 客户端安装错误处理（2）">
+                SAP B1-系统应用-5  SAP B1 客户端安装错误处理（2） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yODU3MS81MTQy"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ohlkkrajk.bkt.clouddn.com/image/jpg/%E5%AF%87%E8%89%B3%E8%B6%85.jpg"
+               alt="BlenderKou" />
+          <p class="site-author-name" itemprop="name">BlenderKou</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/blenderkou" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/blenderkou" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#检测HANA服务运行是否正常"><span class="nav-number">1.</span> <span class="nav-text">检测HANA服务运行是否正常</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看网络"><span class="nav-number">2.</span> <span class="nav-text">查看网络</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  1994 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-BlenderKou"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BlenderKou</span>
+  <a href="http://www.miitbeian.gov.cn/">  鲁ICP备18004745号</a> 
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
 </body>
 </html>
